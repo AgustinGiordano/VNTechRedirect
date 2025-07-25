@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redirigiendo a tu archivo...</title>
+    <script>
+        // Capturar parámetros de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const clienteEmail = urlParams.get('cliente');
+        const archivoId = urlParams.get('archivo');
+        const token = urlParams.get('token'); // Opcional para seguridad
+
+        // URL de tu flujo de Power Automate
+        const POWER_AUTOMATE_URL = "TU_URL_AQUI";
+
+        // Registrar acceso
+        function registrarAcceso() {
+            fetch(POWER_AUTOMATE_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    clienteEmail: clienteEmail,
+                    archivoId: archivoId,
+                    timestamp: new Date().toISOString()
+                })
+            });
+        }
+
+        // Redirigir después de registrar
+        function redirigirADrive() {
+            window.location.href = `https://drive.google.com/file/d/${archivoId}/view`;
+        }
+
+        // Ejecutar flujo
+        window.onload = function() {
+            registrarAcceso();
+            setTimeout(redirigirADrive, 500); // Esperar 0.5 segundos
+        }
+    </script>
+</head>
+<body>
+    <p>Redirigiendo a tu archivo en Google Drive...</p>
+    <p>Si no eres redirigido automáticamente, <a id="driveLink" href="#">haz clic aquí</a>.</p>
+</body>
+</html>
